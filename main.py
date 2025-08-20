@@ -5,21 +5,17 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 
-from functions.get_file_content import get_file_content
-from functions.get_files_info import get_files_info
-from functions.run_python import run_python_file
+from schemas import all_schemas  
 from functions.write_file import write_file
-from schemas import all_schemas  # schemas for Gemini
+from functions.run_python import run_python_file
+from functions.get_files_info import get_files_info
+from functions.get_file_content import get_file_content
 
-# Load environment variables
 load_dotenv()
 api_key = os.getenv("GEMINI_API_KEY")
 client = genai.Client(api_key=api_key)
-
-# Available functions (all schemas)
 available_functions = types.Tool(function_declarations=all_schemas)
 
-# Dispatcher mapping: function name -> implementation
 FUNCTION_MAP = {
     "get_file_content": get_file_content,
     "get_files_info": get_files_info,
@@ -27,9 +23,7 @@ FUNCTION_MAP = {
     "write_file": write_file,
 }
 
-# Working directory for sandboxed execution
 WORKING_DIR = "./calculator"
-
 
 def call_function(function_call_part, verbose=False):
     function_name = function_call_part.name
@@ -40,7 +34,6 @@ def call_function(function_call_part, verbose=False):
     else:
         print(f" - Calling function: {function_name}")
 
-    # Inject working_directory
     function_args["working_directory"] = WORKING_DIR
 
     if function_name not in FUNCTION_MAP:
@@ -69,8 +62,6 @@ def call_function(function_call_part, verbose=False):
         ],
     )
 
-
-# Hardcoded system prompt
 system_prompt = """
 You are a helpful AI coding agent.
 
@@ -84,7 +75,6 @@ When a user asks a question or makes a request, make a function call plan. You c
 All paths you provide should be relative to the working directory. You do not need to specify the working directory in your function calls as it is automatically injected for security reasons.
 """
 
-# Handle command-line arguments
 args = sys.argv
 if len(args) < 2:
     print("No arguments provided.")
@@ -94,11 +84,10 @@ user_prompt = args[1]
 messages = [types.Content(role="user", parts=[types.Part(text=user_prompt)])]
 model_name = "gemini-2.0-flash"
 
-
 def main():
     verbose = len(args) > 2 and args[2] == "--verbose"
 
-    for iteration in range(20):  # max 20 iterations
+    for iteration in range(20):
         if verbose:
             print(f"\n--- Iteration {iteration+1} ---")
 
@@ -118,11 +107,9 @@ def main():
             print("No candidates returned.")
             break
 
-        # Take the first candidate (usually only one)
         candidate = response.candidates[0]
         messages.append(candidate.content)
 
-        # If the model decided to call tools
         if response.function_calls:
             for function_call_part in response.function_calls:
                 function_call_result = call_function(
@@ -141,11 +128,9 @@ def main():
                         f"-> {function_call_result.parts[0].function_response.response}"
                     )
 
-                # Feed result back into conversation
                 messages.append(function_call_result)
 
         else:
-            # If there’s actual text output, we’re done
             if candidate.content and candidate.content.parts:
                 final_text = candidate.content.parts[0].text
                 print("\nAI Final Response:")
