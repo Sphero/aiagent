@@ -1,6 +1,5 @@
 import google.genai.types as types
 
-# Schema: List files and directories
 schema_get_files_info = types.FunctionDeclaration(
     name="get_files_info",
     description="Lists files in the specified directory along with their sizes, constrained to the working directory.",
@@ -15,7 +14,6 @@ schema_get_files_info = types.FunctionDeclaration(
     ),
 )
 
-# Schema: Read file contents
 schema_get_file_content = types.FunctionDeclaration(
     name="get_file_content",
     description="Reads and returns the contents of a file inside the working directory.",
@@ -31,7 +29,6 @@ schema_get_file_content = types.FunctionDeclaration(
     ),
 )
 
-# Schema: Execute Python files
 schema_run_python_file = types.FunctionDeclaration(
     name="run_python_file",
     description="Executes a Python file with optional arguments inside the working directory.",
@@ -52,7 +49,6 @@ schema_run_python_file = types.FunctionDeclaration(
     ),
 )
 
-# Schema: Write or overwrite files
 schema_write_file = types.FunctionDeclaration(
     name="write_file",
     description="Writes content to a file inside the working directory. Creates the file if it does not exist and overwrites it if it does.",
@@ -72,7 +68,6 @@ schema_write_file = types.FunctionDeclaration(
     ),
 )
 
-# Export all schemas together
 all_schemas = [
     schema_get_files_info,
     schema_get_file_content,

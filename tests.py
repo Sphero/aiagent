@@ -20,8 +20,7 @@ from functions.write_file import write_file
 # print(run_python_file("calculator", "tests.py"))
 # print(run_python_file("calculator", "../main.py"))
 # print(run_python_file("calculator", "nonexistent.py"))
-
-print(get_file_content("calculator", "main.py"))
-print(write_file("calculator", "main.txt", "hello"))
-print(run_python_file("calculator", "main.py"))
-print(get_files_info("calculator", "pkg"))
+# print(get_file_content("calculator", "main.py"))
+# print(write_file("calculator", "main.txt", "hello"))
+# print(run_python_file("calculator", "main.py"))
+# print(get_files_info("calculator", "pkg"))
