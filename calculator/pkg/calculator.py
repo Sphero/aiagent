@@ -1,6 +1,3 @@
-# calculator.py
-
-
 class Calculator:
     def __init__(self):
         self.operators = {
@@ -10,7 +7,7 @@ class Calculator:
             "/": lambda a, b: a / b,
         }
         self.precedence = {
-            "+": 3,
+            "+": 1,
             "-": 1,
             "*": 2,
             "/": 2,
